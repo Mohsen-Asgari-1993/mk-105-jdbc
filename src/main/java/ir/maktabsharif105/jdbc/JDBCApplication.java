@@ -1,0 +1,7 @@
+package ir.maktabsharif105.jdbc;
+
+public class JDBCApplication {
+
+    public static void main(String[] args) {
+    }
+}
