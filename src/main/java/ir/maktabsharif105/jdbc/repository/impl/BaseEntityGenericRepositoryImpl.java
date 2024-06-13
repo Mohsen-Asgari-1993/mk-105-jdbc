@@ -2,6 +2,7 @@ package ir.maktabsharif105.jdbc.repository.impl;
 
 import ir.maktabsharif105.jdbc.domain.BaseEntity;
 import ir.maktabsharif105.jdbc.repository.BaseEntityGenericRepository;
+import ir.maktabsharif105.jdbc.util.InsertKey;
 import ir.maktabsharif105.jdbc.util.QueryUtil;
 
 import java.sql.Connection;
@@ -9,6 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static ir.maktabsharif105.jdbc.util.QueryUtil.FIND_ALL_QUERY_TEMPLATE;
 import static ir.maktabsharif105.jdbc.util.QueryUtil.FIND_BY_ID_QUERY_TEMPLATE;
@@ -26,11 +30,7 @@ public abstract class BaseEntityGenericRepositoryImpl<T extends BaseEntity<ID>, 
     @Override
     public T save(T entity) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    getInsertQuery(),
-                    PreparedStatement.RETURN_GENERATED_KEYS
-            );
-            setInsertParamsInQuery(preparedStatement, entity);
+            PreparedStatement preparedStatement = getPreparedStatementForInsert(entity);
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
@@ -41,6 +41,45 @@ public abstract class BaseEntityGenericRepositoryImpl<T extends BaseEntity<ID>, 
             throw new RuntimeException(e);
         }
     }
+
+    private PreparedStatement getPreparedStatementForInsert(T entity) throws SQLException {
+        /*PreparedStatement preparedStatement = connection.prepareStatement(
+                getInsertQuery(),
+                PreparedStatement.RETURN_GENERATED_KEYS
+        );
+        setInsertParamsInQuery(preparedStatement, entity);
+        return preparedStatement;*/
+
+        AtomicInteger atomicInteger = new AtomicInteger(1);
+        AtomicReference<String> columnName = new AtomicReference<>("");
+        AtomicReference<String> questionMarks = new AtomicReference<>("");
+        Map<InsertKey, Object> insertMap = getInsertMap(entity);
+        insertMap.forEach((key, value) -> {
+            columnName.set(columnName.get().concat(key.getColumnName() + ","));
+            questionMarks.set(questionMarks.get().concat("?" + ","));
+            key.setParamIndex(atomicInteger.getAndIncrement());
+        });
+
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                String.format(
+                        QueryUtil.INSERT_QUERY_TEMPLATE,
+                        getTableName(),
+                        columnName.get().substring(0, columnName.get().length() - 1),
+                        questionMarks.get().substring(0, questionMarks.get().length() - 1)
+                ),
+                PreparedStatement.RETURN_GENERATED_KEYS
+        );
+        insertMap.forEach((insertKey, o) -> {
+            try {
+                preparedStatement.setObject(insertKey.getParamIndex(), o);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return preparedStatement;
+    }
+
+    protected abstract Map<InsertKey, Object> getInsertMap(T entity);
 
     @Override
     public T update(T entity) {

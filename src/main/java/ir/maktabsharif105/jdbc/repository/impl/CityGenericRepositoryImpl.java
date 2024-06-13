@@ -3,17 +3,28 @@ package ir.maktabsharif105.jdbc.repository.impl;
 import ir.maktabsharif105.jdbc.domain.City;
 import ir.maktabsharif105.jdbc.domain.Province;
 import ir.maktabsharif105.jdbc.repository.CityGenericRepository;
+import ir.maktabsharif105.jdbc.util.InsertKey;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CityGenericRepositoryImpl
         extends BaseEntityGenericRepositoryImpl<City, Integer>
         implements CityGenericRepository {
     public CityGenericRepositoryImpl(Connection connection) {
         super(connection);
+    }
+
+    @Override
+    protected Map<InsertKey, Object> getInsertMap(City entity) {
+        Map<InsertKey, Object> insertMap = new HashMap<>();
+        insertMap.put(new InsertKey(City.NAME), entity.getName());
+        insertMap.put(new InsertKey(City.PROVINCE_ID), entity.getProvince().getId());
+        return insertMap;
     }
 
     @Override

@@ -26,7 +26,7 @@ public class JDBCApplication {
         connection.setAutoCommit(true);
         CityGenericRepository cityGenericRepository = new CityGenericRepositoryImpl(connection);
         cityGenericRepository.save(
-                new City(null, "شهر ری", new Province(1L, null))
+                new City(null, "پاکدشت", new Province(1L, null))
         );
     }
 }

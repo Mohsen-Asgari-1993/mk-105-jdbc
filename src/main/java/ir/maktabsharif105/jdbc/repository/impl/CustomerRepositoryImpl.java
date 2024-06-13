@@ -2,15 +2,22 @@ package ir.maktabsharif105.jdbc.repository.impl;
 
 import ir.maktabsharif105.jdbc.domain.Customer;
 import ir.maktabsharif105.jdbc.repository.CustomerRepository;
+import ir.maktabsharif105.jdbc.util.InsertKey;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Map;
 
 public class CustomerRepositoryImpl extends BaseUserRepositoryImpl<Customer>
         implements CustomerRepository {
     public CustomerRepositoryImpl(Connection connection) {
         super(connection);
+    }
+
+    @Override
+    protected Map<InsertKey, Object> getInsertMap(Customer entity) {
+        return null;
     }
 
     @Override
