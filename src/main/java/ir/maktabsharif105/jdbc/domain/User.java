@@ -1,7 +1,17 @@
 package ir.maktabsharif105.jdbc.domain;
 
 import ir.maktabsharif105.jdbc.domain.enumeration.Grade;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.Set;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends BaseEntity<Long> {
 
     public static final String TABLE_NAME = "users";
@@ -23,61 +33,9 @@ public class User extends BaseEntity<Long> {
 
     private Grade gradeEnum;
 
-    public String getFirstName() {
-        return firstName;
-    }
+    private Set<Role> roles;
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getGrade() {
-        return grade;
-    }
-
-    public void setGrade(String grade) {
-        this.grade = grade;
-    }
+    private Set<String> phoneNumbers;
 
     @Override
     public String toString() {

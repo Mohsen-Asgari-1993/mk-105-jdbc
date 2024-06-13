@@ -10,8 +10,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class BaseEntity<ID> {
+public class Role extends BaseEntity<Long> {
 
-    private ID id;
-
+    private String name;
 }
