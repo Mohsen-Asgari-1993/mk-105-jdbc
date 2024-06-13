@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 import static ir.maktabsharif105.jdbc.util.QueryUtil.FIND_ALL_QUERY_TEMPLATE;
 import static ir.maktabsharif105.jdbc.util.QueryUtil.FIND_BY_ID_QUERY_TEMPLATE;
@@ -24,7 +25,21 @@ public abstract class BaseEntityGenericRepositoryImpl<T extends BaseEntity<ID>, 
 
     @Override
     public T save(T entity) {
-        return null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    getInsertQuery(),
+                    PreparedStatement.RETURN_GENERATED_KEYS
+            );
+            setInsertParamsInQuery(preparedStatement, entity);
+            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            if (resultSet.next()) {
+                setIdInNewEntity(resultSet, entity);
+            }
+            return entity;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -146,6 +161,41 @@ public abstract class BaseEntityGenericRepositoryImpl<T extends BaseEntity<ID>, 
         );
     }
 
+    protected String getInsertQuery() {
+//        insert into %s(%s) values(%s)
+//        insert into city(name) values(?)
+//        insert into user(first_name, username, password) values(?)
+        return String.format(
+                QueryUtil.INSERT_QUERY_TEMPLATE,
+                getTableName(),
+                getInsertColumnNames(),
+                getQuestionMarksForInsert()
+        );
+    }
+
+    protected String getInsertColumnNames() {
+        String[] insertColumns = getInsertColumnNamesArray();
+        if (insertColumns == null || insertColumns.length == 0) {
+            throw new RuntimeException("wrong implementation");
+        }
+        return String.join(
+                ",",
+                insertColumns
+        );
+    }
+
+    protected String getQuestionMarksForInsert() {
+        String[] insertColumns = getInsertColumnNamesArray();
+        if (insertColumns == null || insertColumns.length == 0) {
+            throw new RuntimeException("wrong implementation");
+        }
+        Arrays.fill(insertColumns, "?");
+        return String.join(
+                ",",
+                insertColumns
+        );
+    }
+
     protected abstract String getTableName();
 
     protected abstract T mapResultSetToBaseEntity(ResultSet resultSet);
@@ -153,4 +203,10 @@ public abstract class BaseEntityGenericRepositoryImpl<T extends BaseEntity<ID>, 
     protected abstract T[] getEntityArrayForFindAll();
 
     protected abstract void fillIdParameter(PreparedStatement statement, int paramIndex, ID id);
+
+    protected abstract String[] getInsertColumnNamesArray();
+
+    protected abstract void setInsertParamsInQuery(PreparedStatement preparedStatement, T entity);
+
+    protected abstract void setIdInNewEntity(ResultSet resultSet, T entity);
 }

@@ -50,4 +50,33 @@ public class CityGenericRepositoryImpl
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    protected String[] getInsertColumnNamesArray() {
+        return new String[]{
+                City.NAME,
+                City.PROVINCE_ID
+        };
+    }
+
+    @Override
+    protected void setInsertParamsInQuery(PreparedStatement preparedStatement, City entity) {
+        try {
+            preparedStatement.setString(1, entity.getName());
+            preparedStatement.setLong(2, entity.getProvince().getId());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    protected void setIdInNewEntity(ResultSet resultSet, City entity) {
+        try {
+            entity.setId(
+                    resultSet.getInt(1)
+            );
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

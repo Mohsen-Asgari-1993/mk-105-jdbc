@@ -4,6 +4,9 @@ public class City extends BaseEntity<Integer> {
 
     public static final String TABLE_NAME = "city";
 
+    public static final String NAME = "name";
+    public static final String PROVINCE_ID = "province_id";
+
     private String name;
 
     private Province province;

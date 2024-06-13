@@ -1,25 +1,33 @@
 package ir.maktabsharif105.jdbc;
 
+import ir.maktabsharif105.jdbc.domain.City;
+import ir.maktabsharif105.jdbc.domain.Province;
+import ir.maktabsharif105.jdbc.repository.CityGenericRepository;
+import ir.maktabsharif105.jdbc.repository.impl.CityGenericRepositoryImpl;
+import ir.maktabsharif105.jdbc.util.ApplicationProperties;
 import lombok.*;
 
-import java.util.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.Random;
 
 public class JDBCApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
-        Set<Person> people = new TreeSet<>(
-                Comparator.comparing(Person::getFirstName)
+        Connection connection = DriverManager.getConnection(
+                ApplicationProperties.DB_URL,
+                ApplicationProperties.DB_USERNAME,
+                ApplicationProperties.DB_PASSWORD
         );
-        people.add(new Person(2, 21, "a"));
-        people.add(new Person(1, 20, "a"));
-        System.out.println(people);
-        people.add(new Person(1, 30, "x"));
-        System.out.println(people);
-        people.add(new Person(2, 22, "f"));
-        people.add(new Person(2, 23, "b"));
-        System.out.println(people);
-
+        connection.setAutoCommit(true);
+        CityGenericRepository cityGenericRepository = new CityGenericRepositoryImpl(connection);
+        cityGenericRepository.save(
+                new City(null, "شهر ری", new Province(1L, null))
+        );
     }
 }
 
