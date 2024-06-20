@@ -7,18 +7,21 @@ public class JDBCApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
+
         Counter c = new Counter();
 
         Thread firstCounterThread = new Thread(
                 () -> {
-                    for (int i = 0; i < 100_000; i++) {
+                    for (int i = 0; i < 5; i++) {
+                        Counter.staticInc();
                         c.inc();
                     }
                 }
         );
         Thread secondCounterThread = new Thread(
                 () -> {
-                    for (int i = 0; i < 100_000; i++) {
+                    for (int i = 0; i < 5; i++) {
+                        Counter.staticDec();
                         c.dec();
                     }
                 }
@@ -29,6 +32,7 @@ public class JDBCApplication {
         firstCounterThread.join();
         secondCounterThread.join();
         System.out.println(c);
+        System.out.println(Counter.staticValue);
     }
 }
 
@@ -37,9 +41,13 @@ class Counter {
 
     private int value = 0;
 
+    static int staticValue = 0;
+
     void inc() {
-        synchronized (this) {
+        synchronized (Counter.class) {
+            System.out.println("inc");
             value++;
+            staticValue++;
         }
 //      1) get value
 //      2) inc value by 1
@@ -47,11 +55,23 @@ class Counter {
     }
 
     void dec() {
-        synchronized (this) {
+        synchronized (Counter.class) {
+            System.out.println("dec");
             value--;
+            staticValue--;
         }
 //      1) get value
 //      2) dec value by 1
 //      3) update value
+    }
+
+    synchronized static void staticInc() {
+        System.out.println("staticInc");
+        staticValue++;
+    }
+
+    synchronized static void staticDec() {
+        System.out.println("staticDec");
+        staticValue--;
     }
 }
