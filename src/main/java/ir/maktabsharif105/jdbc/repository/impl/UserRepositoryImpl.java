@@ -22,7 +22,7 @@ public class UserRepositoryImpl extends BaseUserRepositoryImpl<User>
 
     @Override
     protected String getTableName() {
-        return "user";
+        return User.TABLE_NAME;
     }
 
     @Override
