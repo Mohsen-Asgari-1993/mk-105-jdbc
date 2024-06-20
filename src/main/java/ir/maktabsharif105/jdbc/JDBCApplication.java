@@ -1,14 +1,7 @@
 package ir.maktabsharif105.jdbc;
 
-import ir.maktabsharif105.jdbc.domain.City;
-import ir.maktabsharif105.jdbc.domain.Province;
-import ir.maktabsharif105.jdbc.repository.CityGenericRepository;
-import ir.maktabsharif105.jdbc.repository.impl.CityGenericRepositoryImpl;
-import ir.maktabsharif105.jdbc.util.ApplicationProperties;
 import lombok.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.Objects;
@@ -17,17 +10,19 @@ import java.util.Random;
 public class JDBCApplication {
 
     public static void main(String[] args) throws SQLException {
+        Thread thread = Thread.currentThread();
+        System.out.println(thread);
+        System.out.println(thread.getName());
+        System.out.println(thread.getId());
+        System.out.println(thread.getPriority());
+        System.out.println(thread.getState());
 
-        Connection connection = DriverManager.getConnection(
-                ApplicationProperties.DB_URL,
-                ApplicationProperties.DB_USERNAME,
-                ApplicationProperties.DB_PASSWORD
-        );
-        connection.setAutoCommit(true);
-        CityGenericRepository cityGenericRepository = new CityGenericRepositoryImpl(connection);
-        cityGenericRepository.save(
-                new City(null, "پاکدشت", new Province(1L, null))
-        );
+        thread.setName("MyMain");
+        thread.setPriority(8);
+
+        System.out.println("after change properties:");
+        System.out.println(thread.getName());
+        System.out.println(thread.getPriority());
     }
 }
 
