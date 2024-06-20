@@ -1,77 +1,39 @@
 package ir.maktabsharif105.jdbc;
 
 import lombok.SneakyThrows;
-import lombok.ToString;
 
 public class JDBCApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
-
-        Counter c = new Counter();
-
-        Thread firstCounterThread = new Thread(
-                () -> {
-                    for (int i = 0; i < 5; i++) {
-                        Counter.staticInc();
-                        c.inc();
-                    }
-                }
-        );
-        Thread secondCounterThread = new Thread(
-                () -> {
-                    for (int i = 0; i < 5; i++) {
-                        Counter.staticDec();
-                        c.dec();
-                    }
-                }
-        );
-        secondCounterThread.start();
-        firstCounterThread.start();
-
-        firstCounterThread.join();
-        secondCounterThread.join();
-        System.out.println(c);
-        System.out.println(Counter.staticValue);
+        String first = "first";
+        String second = "second";
+        MyThread firstThread = new MyThread(1, first, second);
+        MyThread secondThread = new MyThread(2, second, first);
     }
 }
 
-@ToString
-class Counter {
+class MyThread extends Thread {
+    String first, second;
+    int id;
 
-    private int value = 0;
+    MyThread(int id, String first, String second) {
+        this.id = id;
+        this.first = first;
+        this.second = second;
+        start();
+    }
 
-    static int staticValue = 0;
-
-    void inc() {
-        synchronized (Counter.class) {
-            System.out.println("inc");
-            value++;
-            staticValue++;
+    @Override
+    @SneakyThrows
+    public void run() {
+        synchronized (this.first) {
+            System.out.println("thread with id: " + id + " in first sync: " + this.first);
+            Thread.sleep(1000);
+            System.out.println("thread with id: " + id + " try to get lock: " + this.second);
+            synchronized (this.second) {
+                System.out.println("thread with id: " + id + " in second sync: " + this.second);
+            }
         }
-//      1) get value
-//      2) inc value by 1
-//      3) update value
-    }
-
-    void dec() {
-        synchronized (Counter.class) {
-            System.out.println("dec");
-            value--;
-            staticValue--;
-        }
-//      1) get value
-//      2) dec value by 1
-//      3) update value
-    }
-
-    synchronized static void staticInc() {
-        System.out.println("staticInc");
-        staticValue++;
-    }
-
-    synchronized static void staticDec() {
-        System.out.println("staticDec");
-        staticValue--;
     }
 }
