@@ -24,26 +24,26 @@ public class JDBCApplication {
 
     @SneakyThrows
     private static void setTotalCounts(DTO dto) {
-        Thread.sleep(
-                random.nextLong(1000, 3000)
-        );
+        long sleep = random.nextLong(1000, 3000);
+        System.out.println("setTotalCounts sleep: " + sleep);
+        Thread.sleep(sleep);
         dto.setTotalCounts(random.nextLong(1, 100));
 
     }
 
     @SneakyThrows
     private static void setClosedCounts(DTO dto) {
-        Thread.sleep(
-                random.nextLong(2000, 5000)
-        );
+        long sleep = random.nextLong(2000, 5000);
+        System.out.println("setClosedCounts sleep: " + sleep);
+        Thread.sleep(sleep);
         dto.setTotalCounts(random.nextLong(1, 100));
     }
 
     @SneakyThrows
     private static void setRejectedCounts(DTO dto) {
-        Thread.sleep(
-                random.nextLong(200, 1000)
-        );
+        long sleep = random.nextLong(200, 1000);
+        System.out.println("setRejectedCounts sleep: " + sleep);
+        Thread.sleep(sleep);
         dto.setRejectedCounts(random.nextLong(1, 100));
     }
 }
