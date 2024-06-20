@@ -3,26 +3,18 @@ package ir.maktabsharif105.jdbc;
 import lombok.*;
 
 import java.sql.SQLException;
+import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Random;
 
 public class JDBCApplication {
 
+    @SneakyThrows
     public static void main(String[] args) throws SQLException {
-        Thread thread = Thread.currentThread();
-        System.out.println(thread);
-        System.out.println(thread.getName());
-        System.out.println(thread.getId());
-        System.out.println(thread.getPriority());
-        System.out.println(thread.getState());
-
-        thread.setName("MyMain");
-        thread.setPriority(8);
-
-        System.out.println("after change properties:");
-        System.out.println(thread.getName());
-        System.out.println(thread.getPriority());
+        System.out.println(ZonedDateTime.now());
+        Thread.sleep(1000);
+        System.out.println(ZonedDateTime.now());
     }
 }
 
