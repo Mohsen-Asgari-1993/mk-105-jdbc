@@ -1,75 +1,53 @@
 package ir.maktabsharif105.jdbc;
 
-import lombok.*;
-
-import java.util.Random;
+import lombok.SneakyThrows;
+import lombok.ToString;
 
 public class JDBCApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
-        DTO dto = new DTO();
-        Random random = new Random();
-        Thread firstThread = new Thread(
-                () -> {
-                    System.out.println(
-                            "in thread: " + Thread.currentThread().getName() + " setTotalCounts"
-                    );
-                    try {
-                        Thread.sleep(random.nextLong(1000, 3000));
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    dto.setTotalCounts(
-                            random.nextLong(0, 100)
-                    );
-                    System.out.println(
-                            "in thread: " + Thread.currentThread().getName() + " --- " + dto
-                    );
-                }
-        );
-        Thread secondThread = new Thread(
-                () -> {
-                    System.out.println(
-                            "in thread: " + Thread.currentThread().getName() + " setActiveCounts"
-                    );
-                    try {
-                        Thread.sleep(random.nextLong(1000, 3000));
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    dto.setActiveCounts(
-                            random.nextLong(0, 100)
-                    );
-                    System.out.println(
-                            "in thread: " + Thread.currentThread().getName() + " --- " + dto
-                    );
-                }
-        );
-        firstThread.start();
-        secondThread.start();
-        System.out.println("before firstThread.join()");
-        firstThread.join();
-        System.out.println("after firstThread.join()");
-        System.out.println("before secondThread.join()");
-        secondThread.join();
-        System.out.println("after secondThread.join()");
-        System.out.println(
-                "in thread: " + Thread.currentThread().getName() + " --- " + dto
-        );
+        Counter c = new Counter();
 
+        Thread firstCounterThread = new Thread(
+                () -> {
+                    for (int i = 0; i < 100_000; i++) {
+                        c.inc();
+                    }
+                }
+        );
+        Thread secondCounterThread = new Thread(
+                () -> {
+                    for (int i = 0; i < 100_000; i++) {
+                        c.dec();
+                    }
+                }
+        );
+        secondCounterThread.start();
+        firstCounterThread.start();
+
+        firstCounterThread.join();
+        secondCounterThread.join();
+        System.out.println(c);
     }
 }
 
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @ToString
-class DTO {
+class Counter {
 
-    private long totalCounts;
+    private int value = 0;
 
-    private long activeCounts;
+    void inc() {
+        value++;
+//      1) get value
+//      2) inc value by 1
+//      3) update value
+    }
 
+    void dec() {
+        value--;
+//      1) get value
+//      2) dec value by 1
+//      3) update value
+    }
 }
