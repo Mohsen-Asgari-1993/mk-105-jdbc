@@ -1,34 +1,75 @@
 package ir.maktabsharif105.jdbc;
 
-import lombok.SneakyThrows;
+import lombok.*;
 
-import java.time.LocalTime;
+import java.util.Random;
 
 public class JDBCApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
-        System.out.println("start: " + Thread.currentThread());
-        Timer timer = new Timer();
-        timer.start();
-        Thread.sleep(20);
-        timer.interrupt();
-        System.out.println("end: " + Thread.currentThread());
+        DTO dto = new DTO();
+        Random random = new Random();
+        Thread firstThread = new Thread(
+                () -> {
+                    System.out.println(
+                            "in thread: " + Thread.currentThread().getName() + " setTotalCounts"
+                    );
+                    try {
+                        Thread.sleep(random.nextLong(1000, 3000));
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    dto.setTotalCounts(
+                            random.nextLong(0, 100)
+                    );
+                    System.out.println(
+                            "in thread: " + Thread.currentThread().getName() + " --- " + dto
+                    );
+                }
+        );
+        Thread secondThread = new Thread(
+                () -> {
+                    System.out.println(
+                            "in thread: " + Thread.currentThread().getName() + " setActiveCounts"
+                    );
+                    try {
+                        Thread.sleep(random.nextLong(1000, 3000));
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    dto.setActiveCounts(
+                            random.nextLong(0, 100)
+                    );
+                    System.out.println(
+                            "in thread: " + Thread.currentThread().getName() + " --- " + dto
+                    );
+                }
+        );
+        firstThread.start();
+        secondThread.start();
+        System.out.println("before firstThread.join()");
+        firstThread.join();
+        System.out.println("after firstThread.join()");
+        System.out.println("before secondThread.join()");
+        secondThread.join();
+        System.out.println("after secondThread.join()");
+        System.out.println(
+                "in thread: " + Thread.currentThread().getName() + " --- " + dto
+        );
+
     }
 }
 
-class Timer extends Thread {
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+class DTO {
 
-    @Override
-    @SneakyThrows
-    public void run() {
-        while (true) {
-            if (Thread.interrupted()) {
-                System.out.println("Timer was interrupted");
-                return;
-            } else {
-                System.out.println(LocalTime.now());
-            }
-        }
-    }
+    private long totalCounts;
+
+    private long activeCounts;
+
 }
