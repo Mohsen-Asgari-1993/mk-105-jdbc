@@ -1,5 +1,6 @@
 package ir.maktabsharif105.jdbc;
 
+import ir.maktabsharif105.jdbc.util.SemaphoreUtil;
 import lombok.SneakyThrows;
 
 import java.util.Random;
@@ -17,6 +18,21 @@ public class JDBCApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
+
+        SemaphoreUtil.acquireCreateAdvert();
+        try {
+            System.out.println("logic");
+        } finally {
+            SemaphoreUtil.releaseCreateAdvert();
+        }
+
+        Long customerId = 5L;
+        SemaphoreUtil.acquireCustomerSemaphore(5L);
+        try {
+            System.out.println("logic");
+        } finally {
+            SemaphoreUtil.releaseCustomerSemaphore(5L);
+        }
 
         Thread thread = new Thread(
                 () -> {
