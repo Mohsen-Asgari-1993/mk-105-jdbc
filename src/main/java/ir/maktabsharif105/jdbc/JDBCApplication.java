@@ -37,15 +37,19 @@ class Counter {
 
     private int value = 0;
 
-    synchronized void inc() {
-        value++;
+    void inc() {
+        synchronized (this) {
+            value++;
+        }
 //      1) get value
 //      2) inc value by 1
 //      3) update value
     }
 
-    synchronized void dec() {
-        value--;
+    void dec() {
+        synchronized (this) {
+            value--;
+        }
 //      1) get value
 //      2) dec value by 1
 //      3) update value
