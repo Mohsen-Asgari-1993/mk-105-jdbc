@@ -12,11 +12,24 @@ public class JDBCApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
+
         LocalTime start = LocalTime.now();
         DTO dto = new DTO();
-        setTotalCounts(dto);
-        setClosedCounts(dto);
-        setRejectedCounts(dto);
+        Thread first = new Thread(
+                () -> setTotalCounts(dto)
+        );
+        Thread second = new Thread(
+                () -> setClosedCounts(dto)
+        );
+        Thread third = new Thread(
+                () -> setRejectedCounts(dto)
+        );
+        first.start();
+        second.start();
+        third.start();
+        first.join();
+        second.join();
+        third.join();
         LocalTime end = LocalTime.now();
         System.out.println(dto);
         System.out.println(Duration.between(start, end).toMillis());
