@@ -9,14 +9,17 @@ public class JDBCApplication {
     @SneakyThrows
     public static void main(String[] args) {
         System.out.println("start: " + Thread.currentThread());
-//        new MySimpleThread().start();
-        MySimpleThread thread = new MySimpleThread();
+
+        Thread thread = new Thread(
+                new MySimpleRunnable()
+        );
         thread.start();
+
         System.out.println("end: " + Thread.currentThread());
     }
 }
 
-class MySimpleThread extends Thread {
+class MySimpleRunnable implements Runnable {
 
 //    public MySimpleThread() {
 //        start();
@@ -26,7 +29,7 @@ class MySimpleThread extends Thread {
     @SneakyThrows
     public void run() {
         System.out.println("start: " + Thread.currentThread());
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 4; i++) {
             System.out.println(LocalTime.now());
             Thread.sleep(1000);
         }
