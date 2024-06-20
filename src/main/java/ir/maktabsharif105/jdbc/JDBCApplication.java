@@ -1,39 +1,69 @@
 package ir.maktabsharif105.jdbc;
 
-import lombok.SneakyThrows;
+import lombok.*;
+
+import java.time.Duration;
+import java.time.LocalTime;
+import java.util.Random;
 
 public class JDBCApplication {
 
+    static Random random = new Random();
+
     @SneakyThrows
     public static void main(String[] args) {
-        String first = "first";
-        String second = "second";
-        MyThread firstThread = new MyThread(1, first, second);
-        MyThread secondThread = new MyThread(2, second, first);
+        LocalTime start = LocalTime.now();
+        DTO dto = new DTO();
+        setTotalCounts(dto);
+        setClosedCounts(dto);
+        setRejectedCounts(dto);
+        LocalTime end = LocalTime.now();
+        System.out.println(dto);
+        System.out.println(Duration.between(start, end).toMillis());
+    }
+
+    @SneakyThrows
+    private static void setTotalCounts(DTO dto) {
+        Thread.sleep(
+                random.nextLong(1000, 3000)
+        );
+        dto.setTotalCounts(random.nextLong(1, 100));
+
+    }
+
+    @SneakyThrows
+    private static void setClosedCounts(DTO dto) {
+        Thread.sleep(
+                random.nextLong(2000, 5000)
+        );
+        dto.setTotalCounts(random.nextLong(1, 100));
+    }
+
+    @SneakyThrows
+    private static void setRejectedCounts(DTO dto) {
+        Thread.sleep(
+                random.nextLong(200, 1000)
+        );
+        dto.setRejectedCounts(random.nextLong(1, 100));
     }
 }
 
-class MyThread extends Thread {
-    String first, second;
-    int id;
+@Setter
+@Getter
+@NoArgsConstructor
+@ToString
+class DTO {
 
-    MyThread(int id, String first, String second) {
-        this.id = id;
-        this.first = first;
-        this.second = second;
-        start();
-    }
+    private long totalCounts;
 
-    @Override
-    @SneakyThrows
-    public void run() {
-        synchronized (this.first) {
-            System.out.println("thread with id: " + id + " in first sync: " + this.first);
-            Thread.sleep(1000);
-            System.out.println("thread with id: " + id + " try to get lock: " + this.second);
-            synchronized (this.second) {
-                System.out.println("thread with id: " + id + " in second sync: " + this.second);
-            }
-        }
-    }
+    private long closedCounts;
+
+    private long rejectedCounts;
+
+    private long waitingCounts;
+
+    private long acceptedCounts;
+
+//    TODO override getter
+
 }
