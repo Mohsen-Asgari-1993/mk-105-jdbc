@@ -2,43 +2,39 @@ package ir.maktabsharif105.jdbc;
 
 import lombok.SneakyThrows;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class JDBCApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
-        Hero hero = new Hero() {
-            @Override
-            public void fight() {
-                System.out.println("fly");
-            }
 
-            @Override
-            public void swim() {
+        List<String> words = new ArrayList<>(
+                List.of(
+                        "mohsen", "ali", "mahdi", "reza", "amirali", "shayan"
+                )
+        );
 
-            }
+        System.out.println(words);
 
-            @Override
-            public void fly() {
+//        Collections.sort(
+//                words,
+//                new Comparator<String>() {
+//                    @Override
+//                    public int compare(String o1, String o2) {
+//                        return Integer.compare(o1.length(), o2.length());
+//                    }
+//                }
+//        );
+//
+//        words.sort((o1, o2) -> {
+//            System.out.println("in concrete method:");
+//            return Integer.compare(o1.length(), o2.length());
+//        });
 
-            }
-        };
-
-        Hero second = new Hero() {
-            @Override
-            public void fight() {
-
-            }
-
-            @Override
-            public void swim() {
-
-            }
-
-            @Override
-            public void fly() {
-
-            }
-        };
+        words.sort((o1, o2) -> Integer.compare(o1.length(), o2.length()));
+        System.out.println(words);
 
 
     }
@@ -48,7 +44,12 @@ interface Hero {
 
     void fight();
 
-    void swim();
+    static void swim() {
 
-    void fly();
+    }
+
+    default void fly() {
+
+    }
+
 }
