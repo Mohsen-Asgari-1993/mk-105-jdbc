@@ -1,36 +1,28 @@
 package ir.maktabsharif105.jdbc;
 
-import ir.maktabsharif105.jdbc.domain.BaseEntity;
 import ir.maktabsharif105.jdbc.domain.City;
 import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class JDBCApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
 
-        List<City> cities = List.of(
-                new City(2),
-                new City(15),
-                new City(8),
-                new City(22),
-                new City(45)
+        List<Integer> integers = List.of(
+                1, 15, 3, 45, 5, 16, 7, 81, 9, 10
         );
 
-        /*List<Integer> ids = new ArrayList<>();
-        for (City city : cities) {
-            ids.add(city.getId());
-        }
-        List<City> dbCities = findAllByIdIsIn(ids);*/
-        List<City> dbCities = findAllByIdIsIn(
-                cities.stream().map(BaseEntity::getId)
-                        .collect(Collectors.toSet())
-        );
+        Stream<Integer> integerStream = integers.stream();
+        List<Integer> sortedList = integerStream.sorted(
+                Integer::compareTo
+        ).toList();
+        System.out.println(sortedList);
+
     }
 
     public static List<City> findAllByIdIsIn(Collection<Integer> ids) {
