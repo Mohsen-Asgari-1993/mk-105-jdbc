@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder(buildMethodName = "buildUser", builderMethodName = "userBuilder")
 public class User extends BaseEntity<Long> {
 
     public static final String TABLE_NAME = "users";
