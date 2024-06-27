@@ -14,6 +14,10 @@ public class City extends BaseEntity<Integer> {
     public City() {
     }
 
+    public City(Integer integer) {
+        super(integer);
+    }
+
     public City(Integer id, String name, Province province) {
         super(id);
         this.name = name;
