@@ -1,47 +1,21 @@
 package ir.maktabsharif105.jdbc;
 
-import lombok.*;
+import lombok.SneakyThrows;
 
-import java.util.Optional;
-import java.util.Random;
+import java.util.stream.Stream;
 
 public class JDBCApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
 
-        Optional<Person> optionalPerson = getOptionalPerson();
-        Person person1 = optionalPerson.orElse(new Person());
+        Stream<Integer> integerStream = Stream.of(
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+        );
 
-
-        Person person = getPerson();
-        if (person == null) {
-            person = new Person();
-        }
+        Stream<Integer> integerStream1 = integerStream.filter(num -> num % 2 != 0);
+        Stream<Integer> integerStream2 = integerStream1.map(num -> num * 5);
+        integerStream2.forEach(System.out::println);
     }
 
-    public static Optional<Person> getOptionalPerson() {
-//        impl logic
-        int i = new Random().nextInt(0, 10);
-        return i >= 5 ? Optional.empty() : Optional.of(new Person());
-//        return new Person();
-    }
-
-    public static Person getPerson() {
-//        impl logic
-        int i = new Random().nextInt(0, 10);
-        return i >= 5 ? null : new Person();
-//        return new Person();
-    }
-
-
-}
-
-
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-class Person {
-    String firstName = "mohsen";
 }
