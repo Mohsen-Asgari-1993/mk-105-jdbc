@@ -1,26 +1,47 @@
 package ir.maktabsharif105.jdbc;
 
-import lombok.SneakyThrows;
+import lombok.*;
 
-import java.util.function.BiConsumer;
+import java.util.Optional;
+import java.util.Random;
 
 public class JDBCApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
-        test(
-                JDBCApplication::print
-        );
+
+        Optional<Person> optionalPerson = getOptionalPerson();
+        Person person1 = optionalPerson.orElse(new Person());
+
+
+        Person person = getPerson();
+        if (person == null) {
+            person = new Person();
+        }
     }
 
-    public static void print(Object o1, Object o2) {
-        System.out.println(o1 + " " + o2);
+    public static Optional<Person> getOptionalPerson() {
+//        impl logic
+        int i = new Random().nextInt(0, 10);
+        return i >= 5 ? Optional.empty() : Optional.of(new Person());
+//        return new Person();
     }
 
-    public static void test(BiConsumer<String, String> biConsumer) {
-        String s1 = "mohsen";
-        String s2 = "ali";
-        biConsumer.accept(s1, s2);
+    public static Person getPerson() {
+//        impl logic
+        int i = new Random().nextInt(0, 10);
+        return i >= 5 ? null : new Person();
+//        return new Person();
     }
 
+
+}
+
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+class Person {
+    String firstName = "mohsen";
 }
