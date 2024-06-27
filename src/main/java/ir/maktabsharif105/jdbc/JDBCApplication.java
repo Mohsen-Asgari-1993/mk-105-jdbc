@@ -1,57 +1,26 @@
 package ir.maktabsharif105.jdbc;
 
-import lombok.*;
+import lombok.SneakyThrows;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
+import java.util.function.BiConsumer;
 
 public class JDBCApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
-        List<String> numbers = List.of(
-                "10", "15", "13", "7", "0", "55"
+        test(
+                JDBCApplication::print
         );
-
-
-        numbers.forEach(t -> System.out.println(t));
-        numbers.forEach(System.out::println);
-
-
-        numbers.forEach(t -> Integer.parseInt(t));
-        numbers.forEach(Integer::parseInt);
-        numbers.forEach(MyWrapper::new);
-        numbers.forEach(String::toUpperCase);
-        numbers.forEach(MyWrapper::new);
-
-        List<Integer> arrayLengths = List.of(1, 5, 6);
-        arrayLengths.stream()
-                .map(length -> new int[length]);
-        arrayLengths.stream()
-                .map(int[]::new);
-
-        List<Instant> instants = List.of(
-                Instant.now().minus(5, ChronoUnit.DAYS),
-                Instant.now().minus(2, ChronoUnit.DAYS),
-                Instant.now().minus(2, ChronoUnit.HOURS)
-        );
-        instants.forEach(instant -> Instant.now().isAfter(instant));
-        instants.forEach(Instant.now()::isAfter);
-
     }
 
-    public static void print(Object o) {
-        System.out.println(o);
+    public static void print(Object o1, Object o2) {
+        System.out.println(o1 + " " + o2);
     }
-}
 
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-class MyWrapper {
-    private String myField;
-
+    public static void test(BiConsumer<String, String> biConsumer) {
+        String s1 = "mohsen";
+        String s2 = "ali";
+        biConsumer.accept(s1, s2);
+    }
 
 }
