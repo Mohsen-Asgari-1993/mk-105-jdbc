@@ -21,9 +21,8 @@ public class JDBCApplication {
         System.out.println(lists);
 
         Stream<String> stringStream = lists.stream().flatMap(Collection::stream);
-        System.out.println(
-                stringStream.toList()
-        );
+//        System.out.println(stringStream.count());
+        stringStream.forEach(System.out::println);
 
     }
 
