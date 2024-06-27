@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -27,8 +28,13 @@ public class JDBCApplication {
 
         System.out.println(collect);
 
-        collect.entrySet().forEach(System.out::println);
+        Set<Map.Entry<Integer, List<String>>> entries = collect.entrySet();
 
+        entries.forEach(System.out::println);
+
+        System.out.println(
+                entries.stream().collect(Collectors.groupingBy(x -> x.getValue().size()))
+        );
 //         1 = {10 = [Christiane], 2 = { 8 = [Bernardo, Valentin]}, 4 = { 3= [Joi, Rex, Gil, Lyn], 4=[Mike, Gigi, Jack, Maud]}}
     }
 
