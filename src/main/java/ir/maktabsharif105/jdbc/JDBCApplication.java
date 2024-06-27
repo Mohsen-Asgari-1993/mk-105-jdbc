@@ -2,52 +2,22 @@ package ir.maktabsharif105.jdbc;
 
 import lombok.SneakyThrows;
 
-import java.util.function.DoubleBinaryOperator;
+import java.util.List;
 
 public class JDBCApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
+        List<String> words = List.of(
+                "mohsen", "ali", "mahdi", "reza", "amirali", "shayan"
+        );
+        System.out.println();
+        words.forEach(JDBCApplication::print);
+        words.forEach(System.out::println);
 
-        double x = 10;
-        double y = 5;
-        System.out.println(
-                "DIVIDE: " + Operation.DIVIDE.apply(x, y)
-        );
-        System.out.println(
-                "PLUS: " + Operation.PLUS.apply(x, y)
-        );
+    }
+
+    public static void print(Object o) {
+        System.out.println(o);
     }
 }
-
-enum Operation {
-    PLUS("+", (x, y) -> x + y),
-    MINUS("-", (x, y) -> x - y),
-    TIMES("*", (x, y) -> x * y),
-    DIVIDE("/", (x, y) -> x / y);
-
-
-    private final String symbol;
-    private final DoubleBinaryOperator op;
-
-    Operation(String symbol, DoubleBinaryOperator op) {
-        this.symbol = symbol;
-        this.op = op;
-    }
-
-    @Override
-    public String toString() {
-        return symbol;
-    }
-
-    public double apply(double x, double y) {
-//        return switch (this) {
-//            case PLUS -> x + y;
-//            case MINUS -> x - y;
-//            case TIMES -> x * y;
-//            case DIVIDE -> x / y;
-//        };
-        return op.applyAsDouble(x, y);
-    }
-}
-
