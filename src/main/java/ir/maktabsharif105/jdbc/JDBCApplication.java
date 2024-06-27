@@ -22,9 +22,12 @@ public class JDBCApplication {
 
         Stream<String> stringStream = lists.stream().flatMap(Collection::stream);
 
-//        System.out.println("contains x: " + stringStream.anyMatch(data -> data.equals("x")));
-//        System.out.println("contains x: " + stringStream.noneMatch(data -> data.equals("x")));
-        System.out.println("contains x: " + stringStream.allMatch(data -> data.equals("x")));
+        stringStream.findFirst().ifPresent(data -> System.out.println(
+                String.join(
+                        "$", data.toUpperCase(), "1", "2"
+                )
+        ));
+
 
     }
 
