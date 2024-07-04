@@ -28,7 +28,7 @@ public class JDBCApplication {
         List<ProductCategory> allRootWithChildren = productCategoryRepository.findAllRootWithChildren();
         allRootWithChildren.forEach(System.out::println);
 
-        KavenegarSender sender = new KavenegarSender();
+        KavenegarSender sender = new KavenegarSender(null);
         sender.send(
                 new SmsRequestDTO(
                         "09121111111",
