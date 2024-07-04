@@ -31,23 +31,34 @@ public class AppConstants {
 
 }
 
+interface PersianName {
+    String getPersianName();
+}
+
 class SmsSetting {
     private SmsPurpose smsPurpose;
     private SmsProviders smsProviders;
 }
 
-enum RequestStatus {
-    REJECTED,
-    ACCEPTED,
-    WAITING;
-
-    public String toPersian() {
-        return switch (this) {
-            case WAITING -> "در انتظار بررسی";
-            case ACCEPTED -> "تایید شده";
-            case REJECTED -> "رد شده";
-        };
-    }
+enum RequestStatus implements PersianName {
+    REJECTED {
+        @Override
+        public String getPersianName() {
+            return "رد شده";
+        }
+    },
+    ACCEPTED {
+        @Override
+        public String getPersianName() {
+            return "تایید شده";
+        }
+    },
+    WAITING {
+        @Override
+        public String getPersianName() {
+            return "در انتظار بررسی";
+        }
+    };
 }
 
 enum SmsProviders {
