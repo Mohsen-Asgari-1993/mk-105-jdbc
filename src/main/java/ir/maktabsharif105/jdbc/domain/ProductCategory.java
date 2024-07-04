@@ -59,3 +59,28 @@ public class ProductCategory extends BaseEntity<Long> {
 //                  children=null
 //              )
 //]
+
+/*create table product_category
+(
+id integer generated always as identity
+constraint id
+primary key,
+title varchar not null,
+parent_id integer
+constraint product_category_product_category_id_fk
+references product_category
+);
+
+create index product_category_parent_id_index
+on product_category (parent_id);*/
+
+
+/*
+insert into product_category(title) values('mobile');
+insert into product_category(title) values('books');
+insert into product_category(title, parent_id) values('usa', 1);
+insert into product_category(title, parent_id) values('china', 1);
+insert into product_category(title, parent_id) values('apple', 3);
+insert into product_category(title, parent_id) values('honor', 4);
+insert into product_category(title, parent_id) values('magazine', 2);
+* */
