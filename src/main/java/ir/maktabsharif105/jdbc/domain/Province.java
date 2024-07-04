@@ -4,6 +4,7 @@ public class Province
         extends BaseEntity<Long> {
 
     public static final String TABLE_NAME = "province";
+    public static final String NAME = "NAME";
 
     private String name;
 

@@ -37,7 +37,12 @@ public class UserRepositoryImpl extends BaseUserRepositoryImpl<User>
 
     @Override
     protected String[] getInsertColumnNamesArray() {
-        return new String[0];
+        return new String[]{
+                User.FIRST_NAME,
+                User.LAST_NAME,
+                User.USERNAME,
+                User.PASSWORD
+        };
     }
 
     @Override

@@ -11,8 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static ir.maktabsharif105.jdbc.util.QueryUtil.FIND_ALL_QUERY_TEMPLATE;
 import static ir.maktabsharif105.jdbc.util.QueryUtil.FIND_BY_ID_QUERY_TEMPLATE;
@@ -43,40 +41,40 @@ public abstract class BaseEntityGenericRepositoryImpl<T extends BaseEntity<ID>, 
     }
 
     private PreparedStatement getPreparedStatementForInsert(T entity) throws SQLException {
-        /*PreparedStatement preparedStatement = connection.prepareStatement(
+        PreparedStatement preparedStatement = connection.prepareStatement(
                 getInsertQuery(),
                 PreparedStatement.RETURN_GENERATED_KEYS
         );
         setInsertParamsInQuery(preparedStatement, entity);
-        return preparedStatement;*/
-
-        AtomicInteger atomicInteger = new AtomicInteger(1);
-        AtomicReference<String> columnName = new AtomicReference<>("");
-        AtomicReference<String> questionMarks = new AtomicReference<>("");
-        Map<InsertKey, Object> insertMap = getInsertMap(entity);
-        insertMap.forEach((key, value) -> {
-            columnName.set(columnName.get().concat(key.getColumnName() + ","));
-            questionMarks.set(questionMarks.get().concat("?" + ","));
-            key.setParamIndex(atomicInteger.getAndIncrement());
-        });
-
-        PreparedStatement preparedStatement = connection.prepareStatement(
-                String.format(
-                        QueryUtil.INSERT_QUERY_TEMPLATE,
-                        getTableName(),
-                        columnName.get().substring(0, columnName.get().length() - 1),
-                        questionMarks.get().substring(0, questionMarks.get().length() - 1)
-                ),
-                PreparedStatement.RETURN_GENERATED_KEYS
-        );
-        insertMap.forEach((insertKey, o) -> {
-            try {
-                preparedStatement.setObject(insertKey.getParamIndex(), o);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
         return preparedStatement;
+
+//        AtomicInteger atomicInteger = new AtomicInteger(1);
+//        AtomicReference<String> columnName = new AtomicReference<>("");
+//        AtomicReference<String> questionMarks = new AtomicReference<>("");
+//        Map<InsertKey, Object> insertMap = getInsertMap(entity);
+//        insertMap.forEach((key, value) -> {
+//            columnName.set(columnName.get().concat(key.getColumnName() + ","));
+//            questionMarks.set(questionMarks.get().concat("?" + ","));
+//            key.setParamIndex(atomicInteger.getAndIncrement());
+//        });
+//
+//        PreparedStatement preparedStatement = connection.prepareStatement(
+//                String.format(
+//                        QueryUtil.INSERT_QUERY_TEMPLATE,
+//                        getTableName(),
+//                        columnName.get().substring(0, columnName.get().length() - 1),
+//                        questionMarks.get().substring(0, questionMarks.get().length() - 1)
+//                ),
+//                PreparedStatement.RETURN_GENERATED_KEYS
+//        );
+//        insertMap.forEach((insertKey, o) -> {
+//            try {
+//                preparedStatement.setObject(insertKey.getParamIndex(), o);
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
+//        });
+//        return preparedStatement;
     }
 
     protected abstract Map<InsertKey, Object> getInsertMap(T entity);

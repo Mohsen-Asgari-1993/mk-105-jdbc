@@ -4,7 +4,8 @@ import ir.maktabsharif105.jdbc.domain.BaseEntity;
 import ir.maktabsharif105.jdbc.repository.BaseEntityGenericRepository;
 import ir.maktabsharif105.jdbc.service.BaseEntityService;
 
-public class BaseEntityServiceImpl<T extends BaseEntity<ID>, ID, R extends BaseEntityGenericRepository<T, ID>>
+public class BaseEntityServiceImpl<T extends BaseEntity<ID>, ID,
+        R extends BaseEntityGenericRepository<T, ID>>
         implements BaseEntityService<T, ID> {
 
     protected final R baseRepository;

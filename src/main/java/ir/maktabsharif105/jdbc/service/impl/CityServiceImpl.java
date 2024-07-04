@@ -3,33 +3,29 @@ package ir.maktabsharif105.jdbc.service.impl;
 import ir.maktabsharif105.jdbc.domain.City;
 import ir.maktabsharif105.jdbc.repository.CityGenericRepository;
 import ir.maktabsharif105.jdbc.service.CityService;
-import ir.maktabsharif105.jdbc.util.SemaphoreUtil;
+import ir.maktabsharif105.jdbc.service.ProvinceService;
 
 public class CityServiceImpl extends BaseEntityServiceImpl<City, Integer, CityGenericRepository>
         implements CityService {
 
+    private final ProvinceService provinceService;
+
 
     //         CityServiceImpl(BaseEntityGenericRepository<City, Integer>
-    public CityServiceImpl(CityGenericRepository baseRepository) {
+    public CityServiceImpl(CityGenericRepository baseRepository,
+                           ProvinceService provinceService) {
         super(baseRepository);
+        this.provinceService = provinceService;
     }
 
     @Override
     public City save(City entity) {
-
-        Long customerId = 5L;
-        SemaphoreUtil.acquireCustomerSemaphore(5L);
-        try {
-            System.out.println("logic");
-        } finally {
-            SemaphoreUtil.releaseCustomerSemaphore(5L);
+        if (entity.getProvince() == null || entity.getProvince().getId() == null) {
+            throw new RuntimeException("empty province");
         }
-
-        SemaphoreUtil.acquireCreateAdvert();
-        try {
-            return super.save(entity);
-        } finally {
-            SemaphoreUtil.releaseCreateAdvert();
+        if (!provinceService.existsById(entity.getProvince().getId())) {
+            throw new RuntimeException("wrong province");
         }
+        return super.save(entity);
     }
 }
