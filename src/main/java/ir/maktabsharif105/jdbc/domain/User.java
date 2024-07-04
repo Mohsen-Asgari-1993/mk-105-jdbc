@@ -13,7 +13,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder(buildMethodName = "buildUser", builderMethodName = "userBuilder")
+@SuperBuilder
 public class User extends BaseEntity<Long> {
 
     public static final String TABLE_NAME = "users";

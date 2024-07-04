@@ -13,9 +13,10 @@ public class JDBCApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
-        User user = User.userBuilder()
-                .id(1L)
-                .buildUser();
+        User build = User.builder().id(1L)
+                .firstName("s").build();
+
+        System.out.println(build);
 
     }
 }

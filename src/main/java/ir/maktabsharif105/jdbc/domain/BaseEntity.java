@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder(builderMethodName = "baseEntityBuilder", buildMethodName = "buildBaseEntity")
+@SuperBuilder
 public abstract class BaseEntity<ID> {
 
     private ID id;
