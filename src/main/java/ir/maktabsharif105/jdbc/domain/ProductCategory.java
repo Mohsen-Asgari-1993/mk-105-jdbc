@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 public class ProductCategory extends BaseEntity<Long> {
 
     private String title;
@@ -19,6 +21,14 @@ public class ProductCategory extends BaseEntity<Long> {
 
     private List<ProductCategory> children;
 
+    @Override
+    public String toString() {
+        return "ProductCategory{\n" +
+               "id='" + getId() + '\'' +
+               ",\ntitle='" + title + '\'' +
+               ",\nchildren=" + children +
+               "}\n";
+    }
 }
 //  id   title   parent_id
 //  1    mobile     null
